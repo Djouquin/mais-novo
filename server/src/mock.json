@@ -1,0 +1,26 @@
+[
+    {
+    "name": "marcos",
+    "respiratoryRate": 30,
+    "bloodPressure": 80,
+    "heartRate": 50,
+    "temperature": 39,
+    "conscience": "U",
+    "spo2" :"spo2",
+    "time": "tempo",
+    "device": "dispositivo",
+    "battery": "bateria"
+    },
+    {
+    "name": "rock",
+    "respiratoryRate": 18,
+    "bloodPressure": 110,
+    "heartRate": 90,
+    "temperature": 37,
+    "conscience": "A",
+    "spo2" :"spo2",
+    "time": "tempo",
+    "device": "dispositivo",
+    "battery": "bateria"
+    }
+]
