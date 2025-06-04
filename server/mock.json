@@ -1,0 +1,74 @@
+[
+  {
+    "name": "greenScore", 
+    "respiratoryRate": 10,       
+    "bloodPressure": 120,        
+    "heartRate": 80,             
+    "temperature": 36.5,         
+    "conscience": "A",           
+    "spo2": "spo2",
+    "time": "tempo",
+    "device": "dispositivo",
+    "battery": "bateria"
+  },
+  {
+    "name": "greenScore2", 
+    "respiratoryRate": 19,       
+    "bloodPressure": 120,        
+    "heartRate": 80,             
+    "temperature": 36.5,         
+    "conscience": "A",           
+    "spo2": "spo2",
+    "time": "tempo",
+    "device": "dispositivo",
+    "battery": "bateria"
+  },
+  {
+    "name": "yellowScore", 
+    "respiratoryRate": 26,       
+    "bloodPressure": 120,        
+    "heartRate": 80,            
+    "temperature": 36.5,         
+    "conscience": "A",           
+    "spo2": "spo2",
+    "time": "tempo",
+    "device": "dispositivo",
+    "battery": "bateria"
+  },
+  {
+    "name": "orangeScore", 
+    "respiratoryRate": 31,       
+    "bloodPressure": 120,         
+    "heartRate": 80,            
+    "temperature": 36.5,         
+    "conscience": "A",           
+    "spo2": "spo2",
+    "time": "tempo",
+    "device": "dispositivo",
+    "battery": "bateria"
+  },
+  {
+    "name": "redScore", 
+    "respiratoryRate": 31,
+    "bloodPressure": 120,  
+    "heartRate": 111,      
+    "temperature": 36.5,  
+    "conscience": "A",    
+    "spo2": "spo2",
+    "time": "tempo",
+    "device": "dispositivo",
+    "battery": "bateria"
+  },
+  {
+    "name": "undefinedScore", 
+    "respiratoryRate": null,
+    "bloodPressure": null,
+    "heartRate": null,
+    "temperature": null,
+    "conscience": null,
+    "spo2": "spo2",
+    "time": "tempo",
+    "device": "dispositivo",
+    "battery": "bateria"
+  }
+]

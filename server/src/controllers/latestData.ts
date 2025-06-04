@@ -1,12 +1,25 @@
 import {Router} from 'express';
-import mock from '../mock.json';
+import mock from '../../mock.json';
 import type {PatientData} from '../../../shared/types/PatientData'
 const mockTyped = mock as PatientData[];
 
 const router = Router();
 //rota para fazer o calculo e display dos dados do DB
 
-const coresMews = ["#ffffff", "#C7EF00", "#E3B505", "#FF3A20", "lightgray"];
+router.get('/', async (req, res) => {
+    mockTyped.forEach((paciente,index)=>{ //calcula e soma todos os valores da tabela para o MEWS
+        paciente.MEWS = 
+        calculatePoints(paciente.respiratoryRate,intervalosMews.respiratoryRate)+
+        calculatePoints(paciente.bloodPressure,intervalosMews.bloodPressure)+
+        calculatePoints(paciente.heartRate,intervalosMews.heartRate)+
+        calculatePoints(paciente.temperature,intervalosMews.temperature)+
+        calculatePoints(paciente.conscience,intervalosMews.conscience)
+
+    })
+    res.json(mockTyped); //substituir pelo mongo/sql
+});
+
+export default router;
 
 const intervalosMews: {
     heartRate: [number | null, number | null][];
@@ -22,20 +35,6 @@ const intervalosMews: {
     conscience: [null, null, null, "A", "V", "P", "U"]
 };
 
-router.get('/', async (req, res) => {
-    mockTyped.forEach((paciente,index)=>{ //calcula e soma todos os valores da tabela para o MEWS
-        paciente.MEWS = 
-        calculatePoints(paciente.respiratoryRate,intervalosMews.respiratoryRate)+
-        calculatePoints(paciente.bloodPressure,intervalosMews.bloodPressure)+
-        calculatePoints(paciente.heartRate,intervalosMews.heartRate)+
-        calculatePoints(paciente.temperature,intervalosMews.temperature)+
-        calculatePoints(paciente.conscience,intervalosMews.conscience)
-    })
-    res.json(mockTyped); //substituir pelo mongo/sql
-});
-
-export default router;
-
 function calculatePoints(
     valor: (number | string), 
     intervalos:([ null | number , null | number ][] | (string | null)[])
@@ -48,6 +47,8 @@ function calculatePoints(
         if(Array.isArray(intervalo)) { // para intervalos numericos
             const [min, max] = intervalo;
             
+            if (min == null && max == null) continue;
+
             if (typeof valor === 'number' && 
                 (min == null || valor >= min) &&
                 (max == null || valor <= max)) {
@@ -59,6 +60,7 @@ function calculatePoints(
     }
     return 0;
 }
+
 function getColorBattery (value:any,timestamp:any){
 
 }

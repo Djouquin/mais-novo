@@ -9,18 +9,22 @@ interface Props {
 import type { PatientData } from '../../../shared/types/PatientData';
 
 const PatientDataTable = ({title,route}:Props)=>{
+    
     const [patientData,setPatientData]= useState <PatientData[]>([])
     
     useEffect(()=>{
         const fetchData = () => {
             fetch(route)
-            .then((res) => res.json())
-            .then((data) =>  setPatientData(data))
+            .then(res => res.json())
+            .then((data: PatientData[]) => {
+                const sortedData = data.sort((b,a)=> (a.MEWS ?? 0) - (b.MEWS ?? 0));
+                setPatientData(sortedData)
+            });
         }
         
         fetchData();
 
-        const interval = setInterval(fetchData,5000); //atualiza a cada 5s
+        const interval = setInterval(fetchData,2000); //atualiza a cada 2s
         return () => clearInterval(interval); //para desmount do componente
     },[])
         
@@ -50,7 +54,7 @@ const PatientDataTable = ({title,route}:Props)=>{
                     <tr key = {index}
                     className="text-center divide-x-4 divide-cyan-800 text-black bg-cyan-200">
                         <td className="p-3">{p.name}</td>
-                        <td className="p-3">{p.MEWS}</td>
+                        <td className={`p-3 ${getMewsColor(p.MEWS)}`}>{p.MEWS}</td>
                         <td className="p-3">{p.respiratoryRate}</td>
                         <td className="p-3">{p.bloodPressure}</td>
                         <td className="p-3">{p.heartRate}</td>
@@ -66,5 +70,17 @@ const PatientDataTable = ({title,route}:Props)=>{
             </table>
         </div>
     )
+}
+
+const coresMews = ["bg-green-500","bg-yellow-500", "bg-orange-500", "bg-red-500", "bg-gray-400"];
+
+function getMewsColor(MewsScore: number|undefined):string{
+    if(MewsScore == null) return coresMews[4];
+    if(MewsScore < 2) return coresMews[0];
+    if(MewsScore === 2) return coresMews[1];
+    if(MewsScore < 5) return coresMews[2];
+    if(MewsScore >= 5) return coresMews[3];
+
+    return '';
 }
 export default PatientDataTable;
