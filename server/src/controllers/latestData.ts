@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import mock from '../../mock.json';
+import mock from '../../mock.json'; // quando oficial, virá da database
 import type {PatientData} from '../../../shared/types/PatientData'
 const mockTyped = mock as PatientData[];
 

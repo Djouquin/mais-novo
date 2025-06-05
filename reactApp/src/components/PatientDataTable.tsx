@@ -1,18 +1,16 @@
-import Header from './Header';
 import battery from '../assets/battery-charging-icon.svg';
 import { useEffect, useState } from "react";
-
-interface Props {
-    title: string;
-    route: string;
-}
 import type { PatientData } from '../../../shared/types/PatientData';
 
-const PatientDataTable = ({title,route}:Props)=>{
+interface Props {
+    route: string;
+}
+
+const PatientDataTable = ({route}:Props)=>{
     
     const [patientData,setPatientData]= useState <PatientData[]>([])
     
-    useEffect(()=>{
+    useEffect(()=>{ //fetch e organiza os dados da rota em MEWS decrescente
         const fetchData = () => {
             fetch(route)
             .then(res => res.json())
@@ -26,11 +24,10 @@ const PatientDataTable = ({title,route}:Props)=>{
 
         const interval = setInterval(fetchData,2000); //atualiza a cada 2s
         return () => clearInterval(interval); //para desmount do componente
-    },[])
-        
-    return(
+    },[])//encontrar maneira de atualizar com dependency não setInterval
+      
+    return( //cria e preenche tabela  
         <div className="w-full overflow-x-auto">
-            <Header title ={title}/>
             <table className="table-auto w-full">
                 <thead>
                     <tr className= "divide-x-4 text-2xl text-cyan-50 divide-blue-950 bg-blue-900">
@@ -55,15 +52,15 @@ const PatientDataTable = ({title,route}:Props)=>{
                     className="text-center divide-x-4 divide-cyan-800 text-black bg-cyan-200">
                         <td className="p-3">{p.name}</td>
                         <td className={`p-3 ${getMewsColor(p.MEWS)}`}>{p.MEWS}</td>
-                        <td className="p-3">{p.respiratoryRate}</td>
-                        <td className="p-3">{p.bloodPressure}</td>
-                        <td className="p-3">{p.heartRate}</td>
-                        <td className="p-3">{p.temperature}</td>
-                        <td className="p-3">{p.conscience}</td>
-                        <td className='p-3'>{p.spo2}</td>
-                        <td className="p-3">{p.time}</td>
-                        <td className="p-3">{p.device}</td>
-                        <td className="p-3">{p.battery}</td>
+                        <td className="p-3">{isNull(p.respiratoryRate)}</td>
+                        <td className="p-3">{isNull(p.bloodPressure)}</td>
+                        <td className="p-3">{isNull(p.heartRate)}</td>
+                        <td className="p-3">{isNull(p.temperature)}</td>
+                        <td className="p-3">{isNull(p.conscience)}</td>
+                        <td className='p-3'>{isNull(p.spo2)}</td>
+                        <td className="p-3">{isNull(p.time)}</td>
+                        <td className="p-3">{isNull(p.device)}</td>
+                        <td className="p-3">{isNull(p.battery)}</td>
                     </tr>
                     ))}
                 </tbody>
@@ -72,9 +69,9 @@ const PatientDataTable = ({title,route}:Props)=>{
     )
 }
 
-const coresMews = ["bg-green-500","bg-yellow-500", "bg-orange-500", "bg-red-500", "bg-gray-400"];
-
 function getMewsColor(MewsScore: number|undefined):string{
+    const coresMews = ["bg-green-500","bg-yellow-500", "bg-orange-500", "bg-red-500", "bg-gray-400"];
+    
     if(MewsScore == null) return coresMews[4];
     if(MewsScore < 2) return coresMews[0];
     if(MewsScore === 2) return coresMews[1];
@@ -83,4 +80,9 @@ function getMewsColor(MewsScore: number|undefined):string{
 
     return '';
 }
+
+function isNull(value: number|string|null|undefined){
+    return value ?? '-'
+}
+
 export default PatientDataTable;
