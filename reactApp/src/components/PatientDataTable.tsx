@@ -28,7 +28,7 @@ const PatientDataTable = ({ route }: Props) => {
 
   return (
     //cria e preenche tabela
-    <div className="w-full overflow-x-auto">
+    <div className="w-full overflow-x-auto rounded-2xl">
       <table className="table-auto w-full">
         <thead>
           <tr className="divide-x-4 text-2xl text-cyan-50 divide-blue-950 bg-blue-900">
