@@ -8,6 +8,6 @@ export interface PatientData {
   spo2: string;
   time: string; //descobrir como funciona timestamp -> string
   device: string;
-  battery: string;
+  battery: number;
   MEWS?: number; //calculado em LatestData
 }

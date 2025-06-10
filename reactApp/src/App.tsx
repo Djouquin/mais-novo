@@ -1,7 +1,7 @@
 import "./App.css";
 import PatientDataTable from "./components/PatientDataTable";
 import Header from "./components/Header";
-import Form from "./components/Form";
+import CreatePatientForm from "./components/CreatePatientForm";
 
 function App() {
   return (
@@ -10,10 +10,7 @@ function App() {
         <Header title="Ultimos Dados do Paciente " />
         <PatientDataTable route="http://localhost:8080/api/ultimosDados" />
         <div className="flex justify-center mt-2">
-          <Form message="Criar novo paciente"></Form>
-        </div>
-        <div className="flex justify-center mt-2">
-          <Form message="Deletar Paciente"></Form>
+          <CreatePatientForm route="http://localhost:8080/api/novoPaciente" message="Criar novo paciente"/>
         </div>
       </div>
     </>

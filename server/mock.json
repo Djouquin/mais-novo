@@ -1,6 +1,7 @@
 [
   {
     "name": "greenScore",
+    "id": 1,
     "respiratoryRate": 10,
     "bloodPressure": 120,
     "heartRate": 80,
@@ -9,10 +10,11 @@
     "spo2": "spo2",
     "time": "tempo",
     "device": "dispositivo",
-    "battery": "bateria"
+    "battery": 100
   },
   {
     "name": "greenScore2",
+    "id": 2,
     "respiratoryRate": 19,
     "bloodPressure": 120,
     "heartRate": 80,
@@ -21,10 +23,11 @@
     "spo2": "spo2",
     "time": "tempo",
     "device": "dispositivo",
-    "battery": "bateria"
+    "battery": 100
   },
   {
     "name": "yellowScore",
+    "id": 3,
     "respiratoryRate": 26,
     "bloodPressure": 120,
     "heartRate": 80,
@@ -33,10 +36,11 @@
     "spo2": "spo2",
     "time": "tempo",
     "device": "dispositivo",
-    "battery": "bateria"
+    "battery": 100
   },
   {
     "name": "orangeScore",
+    "id": 4,
     "respiratoryRate": 31,
     "bloodPressure": 120,
     "heartRate": 80,
@@ -45,10 +49,11 @@
     "spo2": "spo2",
     "time": "tempo",
     "device": "dispositivo",
-    "battery": "bateria"
+    "battery": 100
   },
   {
     "name": "redScore",
+    "id": 5,
     "respiratoryRate": 31,
     "bloodPressure": 120,
     "heartRate": 111,
@@ -57,10 +62,11 @@
     "spo2": "spo2",
     "time": "tempo",
     "device": "dispositivo",
-    "battery": "bateria"
+    "battery": 100
   },
   {
     "name": "undefinedScore",
+    "id": 6,
     "respiratoryRate": null,
     "bloodPressure": null,
     "heartRate": null,
@@ -69,6 +75,6 @@
     "spo2": "spo2",
     "time": "tempo",
     "device": "dispositivo",
-    "battery": "bateria"
+    "battery": 100
   }
 ]
