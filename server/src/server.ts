@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import latestData from "./controllers/latestData";
-import newPatient from "./controllers/newPatient";
+import latestData from "./routes/latestData";
+import newPatient from "./routes/newPatient";
 const app = express();
 
 // Rotas

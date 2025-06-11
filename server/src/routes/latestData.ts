@@ -1,10 +1,10 @@
 import { Router } from "express";
-import mock from "../../mock.json"; // quando oficial, virá da database
+import mock from "../../mock.json"; // quando oficial, virá do BD
 import type { PatientData } from "../../../shared/types/PatientData";
-const mockTyped = mock as PatientData[];
+const mockTyped = mock as PatientData[];// deixa adicionar a propriedade MEWS ao mock (mas não escreve nele)
 
 const router = Router();
-//rota para fazer o calculo e display dos dados do DB
+//rota para fazer o calculo e display dos dados do BD
 
 router.get("/", async (req, res) => {
   mockTyped.forEach((paciente, index) => {
