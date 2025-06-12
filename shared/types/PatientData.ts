@@ -5,7 +5,7 @@ export interface PatientData {
   heartRate: number;
   temperature: number;
   conscience: string;
-  spo2: string;
+  spo2: number;
   time: string; //descobrir como funciona timestamp -> string
   device: string;
   battery: number;

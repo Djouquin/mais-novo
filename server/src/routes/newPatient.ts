@@ -1,9 +1,6 @@
 import { Router } from "express";
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-dotenv.config();
 
-mongoose.connect(process.env.DATABASE_URL!);
 const router = Router();
 //rota para criar pacientes em mock.json (equivalente database)
 
@@ -17,7 +14,7 @@ router.patch('/', async(req,res)=>{
     const parsedTemperature = Number(temperature)
     
     //ler as leituras do dispositivo salvas no BD
-    
+    console.log(req.body)
     
     res.status(200).json({ message: "Paciente atualizado com sucesso!" });
   }

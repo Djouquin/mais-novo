@@ -7,7 +7,7 @@
     "heartRate": 80,
     "temperature": 36.5,
     "conscience": "A",
-    "spo2": "spo2",
+    "spo2": 95,
     "time": "tempo",
     "device": "dispositivo",
     "battery": 100
@@ -20,7 +20,7 @@
     "heartRate": 80,
     "temperature": 36.5,
     "conscience": "A",
-    "spo2": "spo2",
+    "spo2": 95,
     "time": "tempo",
     "device": "dispositivo",
     "battery": 100
@@ -33,7 +33,7 @@
     "heartRate": 80,
     "temperature": 36.5,
     "conscience": "A",
-    "spo2": "spo2",
+    "spo2": 95,
     "time": "tempo",
     "device": "dispositivo",
     "battery": 100
@@ -46,7 +46,7 @@
     "heartRate": 80,
     "temperature": 36.5,
     "conscience": "A",
-    "spo2": "spo2",
+    "spo2": 95,
     "time": "tempo",
     "device": "dispositivo",
     "battery": 100
@@ -59,7 +59,7 @@
     "heartRate": 111,
     "temperature": 36.5,
     "conscience": "A",
-    "spo2": "spo2",
+    "spo2": 95,
     "time": "tempo",
     "device": "dispositivo",
     "battery": 100
@@ -72,7 +72,7 @@
     "heartRate": null,
     "temperature": null,
     "conscience": null,
-    "spo2": "spo2",
+    "spo2": 95,
     "time": "tempo",
     "device": "dispositivo",
     "battery": 100
