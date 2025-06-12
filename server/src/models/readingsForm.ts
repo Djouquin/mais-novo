@@ -4,12 +4,12 @@ import mongoose from 'mongoose'
 const formularioSchema = new mongoose.Schema({
     patientID: { type: String, required: true },  
     timestamp: { type: Number, required: true },
-    freqResp: { type: Number, required: false },
-    pressao: { type: Number, required: false },
-    temperatura: { type: Number, required: false },
-    nivelConsciencia: { type: String, required: false },
-    spo2Formulario: { type: Number, required: false },
-    freqCardiacaFormulario: { type: Number, required: false },
+    respRate: { type: Number, required: false },
+    bloodRate: { type: Number, required: false },
+    temperature: { type: Number, required: false },
+    conscience: { type: String, required: false },
+    spo2Form: { type: Number, required: false },
+    heartRateForm: { type: Number, required: false },
 });
 
 formularioSchema.index({ patientID: 1, timestamp: -1 });  // Índice para otimização
@@ -17,4 +17,4 @@ formularioSchema.index({ patientID: 1, timestamp: -1 });  // Índice para otimiz
 // Modelo para pacientes
 const Formulario = mongoose.model('Formulario', formularioSchema);
 
-module.exports = Formulario; // Exporta o modelo
+export default Formulario;

@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import latestData from "./routes/latestData";
 import newPatient from "./routes/newPatient";
+import createForm from "./utils/createForm"
 const app = express();
 
 // Rotas
@@ -11,7 +12,7 @@ app.use("/api/ultimosDados", latestData);
 app.use("/api/novoPaciente", newPatient);
 
 const PORT = process.env.PORT || 8080;
-
+createForm();
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://192.168.68.119:${PORT}`);
 });
