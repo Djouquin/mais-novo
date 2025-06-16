@@ -15,6 +15,6 @@ const formularioSchema = new mongoose.Schema({
 formularioSchema.index({ patientID: 1, timestamp: -1 });  // Índice para otimização
 
 // Modelo para pacientes
-const Formulario = mongoose.model('Formulario', formularioSchema);
+const Formulario = mongoose.model('Form', formularioSchema);
 
 export default Formulario;

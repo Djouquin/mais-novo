@@ -12,4 +12,4 @@ const readingSchema = new mongoose.Schema({
   const Reading = mongoose.model('Reading', readingSchema);
 
 
-  module.exports = Reading; // Exporta o modelo
+  export default Reading; // Exporta o modelo

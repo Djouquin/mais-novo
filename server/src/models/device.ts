@@ -11,4 +11,4 @@ const deviceSchema = new mongoose.Schema({
 // Modelo para dispositivos
 const Device = mongoose.model('Device', deviceSchema);
 
-module.exports = Device; // Exporta o modelo
+export default Device; // Exporta o modelo

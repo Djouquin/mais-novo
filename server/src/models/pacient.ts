@@ -18,6 +18,6 @@ const pacienteSchema = new mongoose.Schema({
 });
 
 // Modelo para pacientes
-const Paciente = mongoose.model('Paciente', pacienteSchema);
+const Paciente = mongoose.model('Pacient', pacienteSchema);
 
-module.exports = Paciente; // Exporta o modelo
+export default Paciente; // Exporta o modelo
