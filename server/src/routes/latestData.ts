@@ -1,6 +1,7 @@
 import { Router } from "express";
 import Patient from "../models/pacient";
 import ReadingsForm from "../models/readingsForm";
+import Device from "../models/device";
 
 const router = Router();
 //rota para fazer o calculo e display dos dados do BD
@@ -14,15 +15,17 @@ router.get("/", async (req, res) => {
     for (const patient of patients) {
       const form = await ReadingsForm.findOne({ patientID: patient._id });
       if(form){
-        //calcula e soma todos os valores da tabela para o MEWS
+        //calcula MEWS
         const MEWS =
         calculatePoints(form.respRate ?? 0 , intervalosMews.respiratoryRate,) +
         calculatePoints(form.bloodPressure ?? 0, intervalosMews.bloodPressure) +
         calculatePoints(form.heartRateForm ?? 0, intervalosMews.heartRate) +
         calculatePoints(form.temperature ?? 0, intervalosMews.temperature) +
         calculatePoints(form.conscience ?? "", intervalosMews.conscience);
-
-        const date = form.timestamp
+        
+        //formatar horario para hh:mm | dd/mm/a
+        const date = formatDate(form.timestamp)
+        
         results.push(
           {
             name:patient.nome,
@@ -122,8 +125,16 @@ function calculatePoints(
   return 0;
 }
 
-// function formatDate():string{
-
-//   return formatted;
-// }
+function formatDate(timestamp:number):string{
+  const date = new Date(timestamp);
+  
+  const day =(String(date.getDate()).padStart(2,'0'));
+  const month =(String(date.getMonth()+1).padStart(2,'0'));
+  const year =(String(date.getFullYear()));
+  const hours =(String(date.getHours()).padStart(2,'0'));
+  const minutes =(String(date.getMinutes()).padStart(2,'0'));
+  const formatted = `${hours}:${minutes}\n${day}/${month}/${year}`
+  
+  return formatted;
+}
 function getColorBattery(value: any, timestamp: any) {}
