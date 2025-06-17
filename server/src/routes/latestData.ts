@@ -1,25 +1,47 @@
 import { Router } from "express";
-import mock from "../../mock.json"; // quando oficial, virá do BD
-import type { PatientData } from "../../../shared/types/PatientData";
-const mockTyped = mock as PatientData[];// deixa adicionar a propriedade MEWS ao mock (mas não escreve nele)
+import Patient from "../models/pacient";
+import ReadingsForm from "../models/readingsForm";
 
 const router = Router();
 //rota para fazer o calculo e display dos dados do BD
 
+//|Nome|MEWS|FreqResp|Pressao|FreqCard|Temperatura|consciencia|spo2|horario|dispositivo|bateria|
 router.get("/", async (req, res) => {
-  mockTyped.forEach((paciente, index) => {
-    //calcula e soma todos os valores da tabela para o MEWS
-    paciente.MEWS =
-      calculatePoints(
-        paciente.respiratoryRate,
-        intervalosMews.respiratoryRate,
-      ) +
-      calculatePoints(paciente.bloodPressure, intervalosMews.bloodPressure) +
-      calculatePoints(paciente.heartRate, intervalosMews.heartRate) +
-      calculatePoints(paciente.temperature, intervalosMews.temperature) +
-      calculatePoints(paciente.conscience, intervalosMews.conscience);
-  });
-  res.json(mockTyped); //substituir pelo mongo/sql
+  try{
+    const patients = await Patient.find();
+    const results =[];
+    
+    for (const patient of patients) {
+      const form = await ReadingsForm.findOne({ patientID: patient._id });
+      if(form){
+        //calcula e soma todos os valores da tabela para o MEWS
+        const MEWS =
+        calculatePoints(form.respRate ?? 0 , intervalosMews.respiratoryRate,) +
+        calculatePoints(form.bloodPressure ?? 0, intervalosMews.bloodPressure) +
+        calculatePoints(form.heartRateForm ?? 0, intervalosMews.heartRate) +
+        calculatePoints(form.temperature ?? 0, intervalosMews.temperature) +
+        calculatePoints(form.conscience ?? "", intervalosMews.conscience);
+
+        const date = form.timestamp
+        results.push(
+          {
+            name:patient.nome,
+            MEWS:MEWS,
+            respiratoryRate:form.respRate,
+            bloodPressure:form.bloodPressure,
+            heartRate:form.heartRateForm,
+            temperature:form.temperature,
+            conscience:form.conscience,
+            spo2:form.spo2Form,
+            time:date
+          }
+        )
+      }
+    }
+    res.status(200).json(results);
+  }catch{
+    res.status(500).json({message:'erro ao buscar pacientes'});
+  }
 });
 
 export default router;
@@ -100,4 +122,8 @@ function calculatePoints(
   return 0;
 }
 
+// function formatDate():string{
+
+//   return formatted;
+// }
 function getColorBattery(value: any, timestamp: any) {}

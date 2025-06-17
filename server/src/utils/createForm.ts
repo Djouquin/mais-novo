@@ -1,8 +1,9 @@
 import readingForm from '../models/readingsForm';
+import mongoose from 'mongoose';
 
 export async function createForm(){
     const newForm = new readingForm({
-        patientID : "3",
+        patientID : new mongoose.Types.ObjectId('6850455ff371db4ef388c703'), //colocar o que foi criado pelo Mongo
         timestamp : Date.now(),
         respRate: 10,
         bloodRate: 120,
