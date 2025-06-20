@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { InferSchemaType } from 'mongoose'
 
 // Esquema para pacientes
 const pacienteSchema = new mongoose.Schema({
@@ -19,5 +19,5 @@ const pacienteSchema = new mongoose.Schema({
 
 // Modelo para pacientes
 const Paciente = mongoose.model('Pacient', pacienteSchema);
-
+export type IPacient = InferSchemaType<typeof pacienteSchema>;
 export default Paciente; // Exporta o modelo

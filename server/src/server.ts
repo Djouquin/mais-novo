@@ -9,7 +9,7 @@ const app = express();
 //DB
 async function comeca() {
   await config.configDB();
-  //await utils.createForm();
+  // await utils.createForm();
   // await utils.createDevice();
   // await utils.createPacient();
   // await utils.createReading();

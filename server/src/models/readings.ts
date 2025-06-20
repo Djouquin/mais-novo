@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { InferSchemaType } from 'mongoose'
 
 const readingSchema = new mongoose.Schema({
     macAddress: { type: String, required: true },  // Endereço MAC como ID
@@ -7,9 +7,9 @@ const readingSchema = new mongoose.Schema({
     heartRate: { type: Number, required: true },
     battery: { type: Number, required: false },
   });
-  readingSchema.index({ macAddress: 1, timestamp: -1 });  // Índice para otimização
-  
-  const Reading = mongoose.model('Reading', readingSchema);
 
+readingSchema.index({ macAddress: 1, timestamp: -1 });  // Índice para otimização  
+const Reading = mongoose.model('Reading', readingSchema);
 
-  export default Reading; // Exporta o modelo
+export type IReading = InferSchemaType<typeof readingSchema>;
+export default Reading; // Exporta o modelo

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { InferSchemaType } from 'mongoose'
 
 // Esquema para dispositivos
 const deviceSchema = new mongoose.Schema({
@@ -10,5 +10,5 @@ const deviceSchema = new mongoose.Schema({
 
 // Modelo para dispositivos
 const Device = mongoose.model('Device', deviceSchema);
-
+export type IDevice = InferSchemaType<typeof deviceSchema>;
 export default Device; // Exporta o modelo

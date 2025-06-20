@@ -1,45 +1,103 @@
 import { Router } from "express";
-import Patient from "../models/pacient";
-import ReadingsForm from "../models/readingsForm";
+
 import Device from "../models/device";
+import Patient from "../models/pacient";
+import Reading from "../models/readings";
+import ReadingsForm from "../models/readingsForm";
+
+import type { IDevice } from "../models/device";
+import type { IReading } from "../models/readings";
+import type { IReadingForm } from "../models/readingsForm";
 
 const router = Router();
-//rota para fazer o calculo e display dos dados do BD
+//rota para fazer o arrecadamento e calculo dos dados do BD
 
 //|Nome|MEWS|FreqResp|Pressao|FreqCard|Temperatura|consciencia|spo2|horario|dispositivo|bateria|
 router.get("/", async (req, res) => {
   try{
     const patients = await Patient.find();
-    const results =[];
+    const results =[];//ver se tem q declarar dentro ou fora do for
     
     for (const patient of patients) {
-      const form = await ReadingsForm.findOne({ patientID: patient._id });
-      if(form){
+      let form:IReadingForm | null = null;
+      let sensorReadings:IReading | null = null;
+      let device:IDevice | null = null;
+
+      form = await ReadingsForm.findOne({ patientID: patient._id });
+      //verificar se conectado a um device
+      if(patient.intervalos.length !== 0){
+        for (let i of patient.intervalos.reverse()){ //o fato de .reverse() mutar o array original faz diferenca?
+          
+          //procurar no intervalo de uso do paciente qual device estava usando
+          device = await Device.findOne({deviceID: i.deviceID});
+
+          //pegar em Readings a leitura dentro do intervalo
+            sensorReadings = await Reading.findOne({
+            macAddress: device?.macAddress,
+            timestamp: {
+              $gte: i.intervalo[0],
+              $lte: i.intervalo[1]
+            }
+          })
+          
+          //ver se ta conectado a um paciente
+          if( device?.currentPatient!= null && i.intervalo[1] == 999999999999999999){
+           let connectedDevice = device; 
+          }
+          
+          if (sensorReadings != null)break;
+        }
+      }
+
+      //ler dados do form (caso tiver)
+      
+        //definir qual valores de spo2 e heartRate usar atraves de timestamp
+
+        let heartRate: number | null = null;
+        let spo2: number | null = null;
+        console.log(`heartrateForm: ${form?.heartRateForm} spo2Form: ${form?.spo2Form}`)
+        console.log(`heartrateReading: ${sensorReadings?.heartRate} spo2Reading: ${sensorReadings?.spo2}`)
+
+        let formHR = form?.heartRateForm ?? null;
+        let formSPO2 = form?.spo2Form ?? null;
+        let sensorHR = sensorReadings?.heartRate ?? null;
+        let sensorSPO2 = sensorReadings?.spo2 ?? null;
+
+        if ( sensorReadings && form) {
+          let useForm = form.timestamp > sensorReadings.timestamp;
+          heartRate = useForm? formHR : sensorHR;
+          spo2 = useForm? formSPO2 : sensorSPO2; 
+        }
+        else{
+          heartRate = formHR ?? sensorHR;
+          spo2 = formSPO2 ?? sensorSPO2;
+        }
+        console.log('heartRate: ',heartRate);
+        console.log('spo2: ', spo2, '\n'); 
         //calcula MEWS
         const MEWS =
-        calculatePoints(form.respRate ?? 0 , intervalosMews.respiratoryRate,) +
-        calculatePoints(form.bloodPressure ?? 0, intervalosMews.bloodPressure) +
-        calculatePoints(form.heartRateForm ?? 0, intervalosMews.heartRate) +
-        calculatePoints(form.temperature ?? 0, intervalosMews.temperature) +
-        calculatePoints(form.conscience ?? "", intervalosMews.conscience);
+        calculatePoints(form?.respRate ?? 0, intervalosMews.respiratoryRate,) +
+        calculatePoints(form?.bloodPressure ?? 0, intervalosMews.bloodPressure) +
+        calculatePoints(heartRate ?? 0, intervalosMews.heartRate) +
+        calculatePoints(form?.temperature ?? 0, intervalosMews.temperature) +
+        calculatePoints(form?.conscience ?? "", intervalosMews.conscience);
         
-        //formatar horario para hh:mm | dd/mm/a
-        const date = formatDate(form.timestamp)
+        //formata horario para hh:mm | dd/mm/a
+        const date = formatDate(form?.timestamp ?? null)
         
         results.push(
           {
             name:patient.nome,
             MEWS:MEWS,
-            respiratoryRate:form.respRate,
-            bloodPressure:form.bloodPressure,
-            heartRate:form.heartRateForm,
-            temperature:form.temperature,
-            conscience:form.conscience,
-            spo2:form.spo2Form,
+            respiratoryRate:form?.respRate ?? null,
+            bloodPressure:form?.bloodPressure,
+            heartRate:heartRate,
+            temperature:form?.temperature,
+            conscience:form?.conscience,
+            spo2:spo2,
             time:date
           }
         )
-      }
     }
     res.status(200).json(results);
   }catch{
@@ -96,7 +154,7 @@ const intervalosMews: {
 };
 
 function calculatePoints(
-  valor: number | string,
+  valor: number | string | null,
   intervalos: [null | number, null | number][] | (string | null)[],
 ): number {
   if (valor == null) return 0;
@@ -104,10 +162,10 @@ function calculatePoints(
   for (let i = 0; i < 7; i++) {
     const intervalo = intervalos[i];
 
+    // para intervalos numericos
     if (Array.isArray(intervalo)) {
-      // para intervalos numericos
       const [min, max] = intervalo;
-
+      //evitar falsos positivos
       if (min == null && max == null) continue;
 
       if (
@@ -117,24 +175,28 @@ function calculatePoints(
       ) {
         return Math.abs(i - 3);
       }
-    } else {
+    } else if ( typeof valor === "string"){
       //para conceito
       if (intervalo === valor) return Math.abs(i - 3);
-    }
+    }else if (valor == null)return 0;
   }
   return 0;
 }
 
-function formatDate(timestamp:number):string{
-  const date = new Date(timestamp);
-  
-  const day =(String(date.getDate()).padStart(2,'0'));
-  const month =(String(date.getMonth()+1).padStart(2,'0'));
-  const year =(String(date.getFullYear()));
-  const hours =(String(date.getHours()).padStart(2,'0'));
-  const minutes =(String(date.getMinutes()).padStart(2,'0'));
-  const formatted = `${hours}:${minutes}\n${day}/${month}/${year}`
-  
-  return formatted;
+function formatDate(timestamp:number | null):string{
+  if (timestamp != null){
+    const date = new Date(timestamp);
+    
+    const day =(String(date.getDate()).padStart(2,'0'));
+    const month =(String(date.getMonth()+1).padStart(2,'0'));
+    const year =(String(date.getFullYear()));
+    const hours =(String(date.getHours()).padStart(2,'0'));
+    const minutes =(String(date.getMinutes()).padStart(2,'0'));
+    const formatted = `${hours}:${minutes}\n${day}/${month}/${year}`
+    
+    return formatted;
+  }else{
+    return 'balls'
+  }
 }
 function getColorBattery(value: any, timestamp: any) {}

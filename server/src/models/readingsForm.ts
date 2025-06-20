@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { InferSchemaType } from 'mongoose'
 
 // Esquema para dados do formulario
 const formularioSchema = new mongoose.Schema({
@@ -22,4 +22,5 @@ formularioSchema.index({ patientID: 1, timestamp: -1 });  // Índice para otimiz
 // Modelo para pacientes
 const Form = mongoose.model('Form', formularioSchema);
 
+export type IReadingForm = InferSchemaType<typeof formularioSchema>;
 export default Form;
