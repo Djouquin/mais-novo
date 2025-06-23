@@ -62,8 +62,8 @@ const PatientDataTable = ({ route }: Props) => {
               <td className="p-3">{isNull(p.conscience)}</td>
               <td className="p-3">{isNull(p.spo2)}</td>
               <td className="p-3">{isNull(p.time)}</td>
-              <td className="p-3">{isNull(p.device)}</td>
-              <td className="p-3">{isNull(p.battery)}</td>
+              <td className="p-3">{isNull(p.deviceID)}</td>
+              <td className={`p-3 ${getColorBattery(p.battery)}`}>{isNull(p.battery)+ '%'}</td>
             </tr>
           ))}
         </tbody>
@@ -75,8 +75,8 @@ const PatientDataTable = ({ route }: Props) => {
 function getMewsColor(MewsScore: number | undefined): string {
   const coresMews = [
     "bg-green-500",
-    "bg-yellow-500",
-    "bg-orange-500",
+    "bg-yellow-400",
+    "bg-orange-400",
     "bg-red-500",
     "bg-gray-400",
   ];
@@ -94,4 +94,10 @@ function isNull(value: number | string | null | undefined) {
   return value ?? "-";
 }
 
+function getColorBattery(value: number, timestamp?: any) {
+  if (value < 30) return 'bg-orange-400';
+  if (value < 50) return 'bg-yellow-400';
+  return 'bg-green-500';
+  timestamp = 'so pra tirar o warning'
+}
 export default PatientDataTable;

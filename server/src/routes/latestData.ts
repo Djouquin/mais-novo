@@ -30,6 +30,7 @@ router.get("/", async (req, res) => {
           
           //procurar no intervalo de uso do paciente qual device estava usando
           device = await Device.findOne({deviceID: i.deviceID});
+          console.log(device?.macAddress)
 
           //pegar em Readings a leitura dentro do intervalo
             sensorReadings = await Reading.findOne({
@@ -55,8 +56,6 @@ router.get("/", async (req, res) => {
 
         let heartRate: number | null = null;
         let spo2: number | null = null;
-        console.log(`heartrateForm: ${form?.heartRateForm} spo2Form: ${form?.spo2Form}`)
-        console.log(`heartrateReading: ${sensorReadings?.heartRate} spo2Reading: ${sensorReadings?.spo2}`)
 
         let formHR = form?.heartRateForm ?? null;
         let formSPO2 = form?.spo2Form ?? null;
@@ -72,15 +71,14 @@ router.get("/", async (req, res) => {
           heartRate = formHR ?? sensorHR;
           spo2 = formSPO2 ?? sensorSPO2;
         }
-        console.log('heartRate: ',heartRate);
-        console.log('spo2: ', spo2, '\n'); 
+        
         //calcula MEWS
         const MEWS =
-        calculatePoints(form?.respRate ?? 0, intervalosMews.respiratoryRate,) +
-        calculatePoints(form?.bloodPressure ?? 0, intervalosMews.bloodPressure) +
-        calculatePoints(heartRate ?? 0, intervalosMews.heartRate) +
-        calculatePoints(form?.temperature ?? 0, intervalosMews.temperature) +
-        calculatePoints(form?.conscience ?? "", intervalosMews.conscience);
+        calculatePointsMews(form?.respRate ?? 0, intervalosMews.respiratoryRate,) +
+        calculatePointsMews(form?.bloodPressure ?? 0, intervalosMews.bloodPressure) +
+        calculatePointsMews(heartRate ?? 0, intervalosMews.heartRate) +
+        calculatePointsMews(form?.temperature ?? 0, intervalosMews.temperature) +
+        calculatePointsMews(form?.conscience ?? "", intervalosMews.conscience);
         
         //formata horario para hh:mm | dd/mm/a
         const date = formatDate(form?.timestamp ?? null)
@@ -95,7 +93,9 @@ router.get("/", async (req, res) => {
             temperature:form?.temperature,
             conscience:form?.conscience,
             spo2:spo2,
-            time:date
+            time:date,
+            battery:sensorReadings?.battery,
+            deviceID:device?.deviceID
           }
         )
     }
@@ -153,7 +153,7 @@ const intervalosMews: {
   conscience: [null, null, null, "A", "V", "P", "U"],
 };
 
-function calculatePoints(
+function calculatePointsMews(
   valor: number | string | null,
   intervalos: [null | number, null | number][] | (string | null)[],
 ): number {
@@ -199,4 +199,3 @@ function formatDate(timestamp:number | null):string{
     return 'balls'
   }
 }
-function getColorBattery(value: any, timestamp: any) {}
