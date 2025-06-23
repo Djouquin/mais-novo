@@ -63,7 +63,7 @@ const PatientDataTable = ({ route }: Props) => {
               <td className="p-3">{isNull(p.spo2)}</td>
               <td className="p-3">{isNull(p.time)}</td>
               <td className="p-3">{isNull(p.deviceID)}</td>
-              <td className={`p-3 ${getColorBattery(p.battery)}`}>{isNull(p.battery)+ '%'}</td>
+              <td className={`p-3 ${getColorBattery(p.battery)}`}>{isNull(p.battery)+ (p.battery != null ? '%' :'')}</td>
             </tr>
           ))}
         </tbody>
@@ -94,7 +94,8 @@ function isNull(value: number | string | null | undefined) {
   return value ?? "-";
 }
 
-function getColorBattery(value: number, timestamp?: any) {
+function getColorBattery(value?: number, timestamp?: any) {
+  if(value == null) return 'bg-gray-500';
   if (value < 30) return 'bg-orange-400';
   if (value < 50) return 'bg-yellow-400';
   return 'bg-green-500';
