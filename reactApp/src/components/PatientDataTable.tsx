@@ -1,4 +1,4 @@
-import battery from "../assets/battery-charging-icon.svg";
+import battery from "../assets/BateriaIcon.png";
 import { useEffect, useState } from "react";
 import type { PatientData } from "../../../shared/types/PatientData";
 
@@ -32,18 +32,18 @@ const PatientDataTable = ({ route }: Props) => {
       <table className="table-auto w-full">
         <thead>
           <tr className="divide-x-4 text-2xl text-cyan-50 divide-blue-950 bg-blue-900">
-            <th className="px-3">Nome do Paciente</th>
-            <th className="px-3">MEWS</th>
-            <th className="px-3">Frequência Respiratória</th>
-            <th className="px-3">Pressão Arterial</th>
-            <th className="px-3">Frequência Cardíaca</th>
-            <th className="px-3">Temperatura</th>
-            <th className="px-3">Nível de Consciência</th>
-            <th className="px-3">SPO2</th>
-            <th className="px-3">Horário</th>
-            <th className="px-3">Dispositivo</th>
-            <th className="px-3">
-              <img className="size-30" src={battery} />
+            <th className="px-2">Nome do Paciente</th>
+            <th className="px-2">MEWS</th>
+            <th className="px-2">Frequência Respiratória</th>
+            <th className="px-2">Pressão Arterial</th>
+            <th className="px-2">Frequência Cardíaca</th>
+            <th className="px-2">Temperatura</th>
+            <th className="px-2">Nível de Consciência</th>
+            <th className="px-2">SPO2</th>
+            <th className="px-2">Horário</th>
+            <th className="px-2">Dispositivo</th>
+            <th className="px-2">
+              <img className="size-10" src={battery} />
             </th>
           </tr>
         </thead>
@@ -94,11 +94,10 @@ function isNull(value: number | string | null | undefined) {
   return value ?? "-";
 }
 
-function getColorBattery(value?: number, timestamp?: any) {
+function getColorBattery(value?: number) {
   if(value == null) return 'bg-gray-500';
   if (value < 30) return 'bg-orange-400';
   if (value < 50) return 'bg-yellow-400';
   return 'bg-green-500';
-  timestamp = 'so pra tirar o warning'
 }
 export default PatientDataTable;

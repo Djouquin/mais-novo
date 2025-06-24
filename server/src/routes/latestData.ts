@@ -30,7 +30,6 @@ router.get("/", async (req, res) => {
           
           //procurar no intervalo de uso do paciente qual device estava usando
           device = await Device.findOne({deviceID: i.deviceID});
-          console.log(device?.macAddress)
 
           //pegar em Readings a leitura dentro do intervalo
             sensorReadings = await Reading.findOne({
